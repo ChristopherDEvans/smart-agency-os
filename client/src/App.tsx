@@ -7,6 +7,10 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import DashboardLayout from "./components/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
 import Clients from "./pages/Clients";
+import Engagements from "./pages/Engagements";
+import Proposals from "./pages/Proposals";
+import Reports from "./pages/Reports";
+import Inbox from "./pages/Inbox";
 
 function Router() {
   return (
@@ -23,22 +27,22 @@ function Router() {
       </Route>
       <Route path="/engagements">
         <DashboardLayout>
-          <div className="text-center py-12 text-muted-foreground">Engagements page coming soon</div>
+          <Engagements />
         </DashboardLayout>
       </Route>
       <Route path="/proposals">
         <DashboardLayout>
-          <div className="text-center py-12 text-muted-foreground">Proposals page coming soon</div>
+          <Proposals />
         </DashboardLayout>
       </Route>
       <Route path="/reports">
         <DashboardLayout>
-          <div className="text-center py-12 text-muted-foreground">Reports page coming soon</div>
+          <Reports />
         </DashboardLayout>
       </Route>
       <Route path="/inbox">
         <DashboardLayout>
-          <div className="text-center py-12 text-muted-foreground">Inbox page coming soon</div>
+          <Inbox />
         </DashboardLayout>
       </Route>
       <Route path="/404" component={NotFound} />

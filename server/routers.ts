@@ -2,7 +2,8 @@ import { z } from "zod";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
+import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
+import * as ai from "./ai";
 import * as db from "./db";
 
 // ============================================================================
@@ -286,8 +287,30 @@ const proposalRouter = router({
       brief: z.string().optional(),
     }))
     .mutation(async ({ ctx, input }) => {
+      // Get client info for AI generation
+      const client = await db.getClientById(input.clientId, input.agencyId);
+      if (!client) {
+        throw new Error("Client not found");
+      }
+
+      // Generate proposal content using AI if brief is provided
+      let content: string | undefined;
+      if (input.brief) {
+        try {
+          content = await ai.generateProposal({
+            client,
+            title: input.title,
+            brief: input.brief,
+          });
+        } catch (error) {
+          console.error("[Proposal] AI generation failed:", error);
+          // Continue without AI-generated content
+        }
+      }
+
       const result = await db.createProposal({
         ...input,
+        content,
         generatedBy: ctx.user.id,
         status: "draft",
       });
@@ -409,6 +432,25 @@ const reportRouter = router({
 // ============================================================================
 
 const communicationRouter = router({
+  create: protectedProcedure
+    .input(z.object({
+      agencyId: z.number(),
+      clientId: z.number(),
+      type: z.enum(["email", "call", "meeting"]),
+      subject: z.string(),
+      notes: z.string().optional(),
+      timestamp: z.date(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const result = await db.createCommunication({
+        ...input,
+        channel: input.type === "email" ? "email" : "other",
+        direction: "outbound",
+        snippet: input.notes?.slice(0, 200) || input.subject,
+      });
+      return { communicationId: Number((result as any).insertId) };
+    }),
+
   list: protectedProcedure
     .input(z.object({ agencyId: z.number(), limit: z.number().optional() }))
     .query(async ({ input }) => {
