@@ -19,17 +19,21 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
+import { APP_LOGO, APP_TITLE, BRAND_TAGLINE, getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users } from "lucide-react";
+import { LayoutDashboard, LogOut, PanelLeft, Users, Briefcase, FileText, BarChart3, Inbox, MessageSquare } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Page 1", path: "/" },
-  { icon: Users, label: "Page 2", path: "/some-path" },
+  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+  { icon: Users, label: "Clients", path: "/clients" },
+  { icon: Briefcase, label: "Engagements", path: "/engagements" },
+  { icon: FileText, label: "Proposals", path: "/proposals" },
+  { icon: BarChart3, label: "Reports", path: "/reports" },
+  { icon: Inbox, label: "Inbox", path: "/inbox" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
@@ -73,6 +77,9 @@ export default function DashboardLayout({
             <div className="text-center space-y-2">
               <h1 className="text-2xl font-bold tracking-tight">{APP_TITLE}</h1>
               <p className="text-sm text-muted-foreground">
+                {BRAND_TAGLINE}
+              </p>
+              <p className="text-xs text-muted-foreground/70">
                 Please sign in to continue
               </p>
             </div>

@@ -4,15 +4,44 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
+import DashboardLayout from "./components/DashboardLayout";
+import Dashboard from "./pages/Dashboard";
+import Clients from "./pages/Clients";
 
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
+      <Route path="/">
+        <DashboardLayout>
+          <Dashboard />
+        </DashboardLayout>
+      </Route>
+      <Route path="/clients">
+        <DashboardLayout>
+          <Clients />
+        </DashboardLayout>
+      </Route>
+      <Route path="/engagements">
+        <DashboardLayout>
+          <div className="text-center py-12 text-muted-foreground">Engagements page coming soon</div>
+        </DashboardLayout>
+      </Route>
+      <Route path="/proposals">
+        <DashboardLayout>
+          <div className="text-center py-12 text-muted-foreground">Proposals page coming soon</div>
+        </DashboardLayout>
+      </Route>
+      <Route path="/reports">
+        <DashboardLayout>
+          <div className="text-center py-12 text-muted-foreground">Reports page coming soon</div>
+        </DashboardLayout>
+      </Route>
+      <Route path="/inbox">
+        <DashboardLayout>
+          <div className="text-center py-12 text-muted-foreground">Inbox page coming soon</div>
+        </DashboardLayout>
+      </Route>
+      <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -27,7 +56,7 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider
-        defaultTheme="light"
+        defaultTheme="dark"
         // switchable
       >
         <TooltipProvider>

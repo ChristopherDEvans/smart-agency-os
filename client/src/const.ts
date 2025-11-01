@@ -1,6 +1,6 @@
 export { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 
-export const APP_TITLE = import.meta.env.VITE_APP_TITLE || "App";
+export const APP_TITLE = import.meta.env.VITE_APP_TITLE || "Smart Agency OS";
 
 export const APP_LOGO =
   import.meta.env.VITE_APP_LOGO ||
@@ -21,3 +21,35 @@ export const getLoginUrl = () => {
 
   return url.toString();
 };
+
+// Smart Agency OS specific constants
+export const BRAND_TAGLINE = "Automate → Optimize → Grow.";
+
+export const CLIENT_STATUSES = [
+  { value: "prospect", label: "Prospect", color: "text-yellow-400" },
+  { value: "active", label: "Active", color: "text-green-400" },
+  { value: "paused", label: "Paused", color: "text-orange-400" },
+  { value: "churned", label: "Churned", color: "text-red-400" },
+] as const;
+
+export const ENGAGEMENT_STATUSES = [
+  { value: "onboarding", label: "Onboarding", color: "text-blue-400" },
+  { value: "active", label: "Active", color: "text-green-400" },
+  { value: "paused", label: "Paused", color: "text-orange-400" },
+  { value: "complete", label: "Complete", color: "text-gray-400" },
+] as const;
+
+export const PROPOSAL_STATUSES = [
+  { value: "draft", label: "Draft", color: "text-gray-400" },
+  { value: "sent", label: "Sent", color: "text-blue-400" },
+  { value: "approved", label: "Approved", color: "text-green-400" },
+  { value: "rejected", label: "Rejected", color: "text-red-400" },
+] as const;
+
+export const SERVICE_TIERS = [
+  "Basic",
+  "Standard",
+  "Premium",
+  "Enterprise",
+  "Custom",
+] as const;
