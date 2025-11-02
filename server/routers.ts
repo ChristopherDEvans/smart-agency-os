@@ -4,6 +4,8 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import * as ai from "./ai";
+import * as copilot from "./copilot";
+import * as gmail from "./gmail";
 import * as db from "./db";
 
 // ============================================================================
@@ -521,6 +523,67 @@ export const appRouter = router({
   report: reportRouter,
   communication: communicationRouter,
   activity: activityRouter,
+  copilot: router({
+    chat: protectedProcedure
+      .input(z.object({
+        agencyId: z.number(),
+        message: z.string(),
+        conversationHistory: z.array(z.object({
+          role: z.enum(["user", "assistant"]),
+          content: z.string(),
+        })).optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const response = await copilot.processQuery(input);
+        return { response };
+      }),
+
+    insights: protectedProcedure
+      .input(z.object({ agencyId: z.number() }))
+      .query(async ({ input }) => {
+        return await copilot.generateInsights(input.agencyId);
+      }),
+  }),
+  gmail: router({
+    search: protectedProcedure
+      .input(z.object({
+        query: z.string().optional(),
+        maxResults: z.number().optional(),
+      }))
+      .query(async ({ input }) => {
+        return await gmail.searchMessages(input.query, input.maxResults);
+      }),
+
+    readThread: protectedProcedure
+      .input(z.object({ threadId: z.string() }))
+      .query(async ({ input }) => {
+        return await gmail.readThread(input.threadId);
+      }),
+
+    sendEmail: protectedProcedure
+      .input(z.object({
+        to: z.array(z.string()),
+        subject: z.string(),
+        content: z.string(),
+        cc: z.array(z.string()).optional(),
+        bcc: z.array(z.string()).optional(),
+      }))
+      .mutation(async ({ input }) => {
+        const success = await gmail.sendEmail(input);
+        return { success };
+      }),
+
+    getUnread: protectedProcedure
+      .query(async () => {
+        return await gmail.getUnreadEmails();
+      }),
+
+    getClientEmails: protectedProcedure
+      .input(z.object({ clientEmail: z.string() }))
+      .query(async ({ input }) => {
+        return await gmail.getClientEmails(input.clientEmail);
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

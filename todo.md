@@ -71,23 +71,23 @@
 
 ### Unified Inbox
 - [x] Create communications table and schema
-- [ ] Set up Gmail API integration
+- [x] Set up Gmail API integration
 - [ ] Set up Slack API integration
 - [x] Build inbox UI with message list
 - [ ] Implement AI summarization per client
-- [ ] Add smart filters
+- [x] Add smart filters
 - [ ] Build quick reply functionality
-- [ ] Set up periodic message fetching
+- [x] Set up periodic message fetching
 
 ### AI Co-Pilot Assistant
 - [ ] Set up Pinecone vector database
 - [ ] Create embedding service for client data
-- [ ] Build chat bubble UI component
+- [x] Build chat bubble UI component
 - [ ] Implement streaming chat responses
 - [ ] Add RAG (Retrieval-Augmented Generation)
 - [ ] Define co-pilot tools/actions
-- [ ] Implement context-aware responses
-- [ ] Add natural language query over client data
+- [x] Implement context-aware responses
+- [x] Add natural language query over client data
 
 ## Phase 5: Testing & Quality Assurance
 - [ ] Write unit tests for critical business logic

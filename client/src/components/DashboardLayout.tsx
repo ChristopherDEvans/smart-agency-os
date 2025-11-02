@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { APP_LOGO, APP_TITLE, BRAND_TAGLINE, getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users, Briefcase, FileText, BarChart3, Inbox, MessageSquare } from "lucide-react";
+import { LayoutDashboard, LogOut, PanelLeft, Users, Briefcase, FileText, BarChart3, Inbox, MessageSquare, Sparkles } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -34,6 +34,7 @@ const menuItems = [
   { icon: FileText, label: "Proposals", path: "/proposals" },
   { icon: BarChart3, label: "Reports", path: "/reports" },
   { icon: Inbox, label: "Inbox", path: "/inbox" },
+  { icon: Sparkles, label: "AI Co-Pilot", path: "/copilot" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";

@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Mail, Phone, MessageSquare, Calendar, User } from "lucide-react";
+import { Plus, Mail, Phone, MessageSquare, Calendar, User, RefreshCw, ExternalLink } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -46,6 +46,11 @@ export default function Inbox() {
   const { data: communications, isLoading } = trpc.communication.list.useQuery(
     { agencyId: selectedAgencyId!, limit: 50 },
     { enabled: !!selectedAgencyId }
+  );
+
+  const { data: gmailMessages, isLoading: gmailLoading, refetch: refetchGmail } = trpc.gmail.getUnread.useQuery(
+    undefined,
+    { enabled: !!selectedAgencyId, refetchOnMount: false }
   );
 
   const { data: clients } = trpc.clients.list.useQuery(
@@ -86,7 +91,68 @@ export default function Inbox() {
         </Dialog>
       </div>
 
+      {/* Gmail Integration */}
+      <Card className="mb-6">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Mail className="h-5 w-5" />
+              Gmail Inbox
+            </CardTitle>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => refetchGmail()}
+              disabled={gmailLoading}
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${gmailLoading ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {gmailLoading ? (
+            <div className="text-center py-6 text-muted-foreground">Loading emails...</div>
+          ) : gmailMessages && gmailMessages.length > 0 ? (
+            <div className="space-y-2">
+              {gmailMessages.slice(0, 5).map((msg: any) => (
+                <div
+                  key={msg.id}
+                  className="p-3 rounded-lg border hover:bg-accent/50 transition-colors cursor-pointer"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium truncate">{msg.subject || '(No subject)'}</div>
+                      <div className="text-sm text-muted-foreground truncate">{msg.from}</div>
+                      <div className="text-sm text-muted-foreground line-clamp-1 mt-1">
+                        {msg.snippet}
+                      </div>
+                    </div>
+                    <div className="text-xs text-muted-foreground whitespace-nowrap">
+                      {new Date(msg.date).toLocaleDateString()}
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {gmailMessages.length > 5 && (
+                <div className="text-center pt-2">
+                  <Button variant="ghost" size="sm">
+                    View all {gmailMessages.length} unread emails
+                    <ExternalLink className="ml-2 h-3 w-3" />
+                  </Button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="text-center py-6 text-muted-foreground">
+              No unread emails. Great job staying on top of your inbox!
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Communications List */}
+      <h2 className="text-xl font-semibold mb-3">Logged Communications</h2>
       {isLoading ? (
         <div className="text-center py-12 text-muted-foreground">Loading communications...</div>
       ) : communications && communications.length > 0 ? (

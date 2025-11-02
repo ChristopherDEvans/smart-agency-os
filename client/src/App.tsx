@@ -11,6 +11,7 @@ import Engagements from "./pages/Engagements";
 import Proposals from "./pages/Proposals";
 import Reports from "./pages/Reports";
 import Inbox from "./pages/Inbox";
+import CoPilot from "./pages/CoPilot";
 
 function Router() {
   return (
@@ -43,6 +44,11 @@ function Router() {
       <Route path="/inbox">
         <DashboardLayout>
           <Inbox />
+        </DashboardLayout>
+      </Route>
+      <Route path="/copilot">
+        <DashboardLayout>
+          <CoPilot />
         </DashboardLayout>
       </Route>
       <Route path="/404" component={NotFound} />
